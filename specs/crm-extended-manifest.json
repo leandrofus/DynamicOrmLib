@@ -1,0 +1,25 @@
+{
+  "module": {"name": "crm", "version": "0.1.0", "author": "DynamicOrmLib"},
+  "dependsOn": ["inventory@>=0.1.0"],
+  "impacts": [
+    {
+      "action": "addRelation",
+      "targetModule": "inventory",
+      "targetModel": "product",
+      "field": {
+        "name": "default_contact_id",
+        "type": "relation",
+        "relation": {"model": "contact"}
+      }
+    }
+  ],
+  "models": [
+    {
+      "name": "contact",
+      "fields": [
+        {"name": "name", "type": "string", "required": true},
+        {"name": "email", "type": "string"}
+      ]
+    }
+  ]
+}
