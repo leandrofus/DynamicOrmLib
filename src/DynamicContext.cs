@@ -211,6 +211,62 @@ public class DynamicContext
     throw new KeyNotFoundException("Record not found");
   }
 
+  public void DeleteRecords(string modelName, QueryOptions options)
+  {
+    if (_provider != null) { _provider.DeleteRecords(modelName, options); return; }
+    // In-memory implementation
+    if (!_records.ContainsKey(modelName)) return;
+    var records = _records[modelName];
+    var recordsToDelete = new List<DynamicRecord>();
+
+    foreach (var record in records)
+    {
+      if (MatchesConditions(record, options.Where))
+      {
+        recordsToDelete.Add(record);
+      }
+    }
+
+    foreach (var record in recordsToDelete)
+    {
+      records.Remove(record);
+    }
+  }
+
+  private bool MatchesConditions(DynamicRecord record, List<FilterCondition>? conditions)
+  {
+    if (conditions == null || conditions.Count == 0) return true;
+
+    foreach (var condition in conditions)
+    {
+      if (!record.Data.TryGetPropertyValue(condition.Field, out var value))
+        return false;
+
+      if (!MatchesCondition(value, condition))
+        return false;
+    }
+
+    return true;
+  }
+
+  private bool MatchesCondition(JsonNode? value, FilterCondition condition)
+  {
+    var actualValue = value?.ToString();
+    var expectedValue = condition.Value?.ToString();
+
+    return condition.Op switch
+    {
+      FilterOp.Eq => actualValue == expectedValue,
+      FilterOp.Neq => actualValue != expectedValue,
+      FilterOp.Gt => string.Compare(actualValue, expectedValue) > 0,
+      FilterOp.Gte => string.Compare(actualValue, expectedValue) >= 0,
+      FilterOp.Lt => string.Compare(actualValue, expectedValue) < 0,
+      FilterOp.Lte => string.Compare(actualValue, expectedValue) <= 0,
+      FilterOp.Contains => actualValue?.Contains(expectedValue ?? "") ?? false,
+      _ => false
+    };
+  }
+
   public DynamicRecord UpsertRecord(string modelName, string? id, JsonObject data)
   {
     if (_provider != null) return _provider.UpsertRecord(modelName, id, data);

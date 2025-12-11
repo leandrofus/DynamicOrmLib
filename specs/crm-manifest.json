@@ -1,0 +1,12 @@
+{
+  "module": { "name": "crm", "version": "0.1.0", "author": "DynamicOrmLib" },
+  "models": [
+    {
+      "name": "contact",
+      "fields": [
+        { "name": "name", "type": "string", "required": true },
+        { "name": "email", "type": "string" }
+      ]
+    }
+  ]
+}

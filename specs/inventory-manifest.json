@@ -1,0 +1,16 @@
+{
+  "module": {
+    "name": "inventory",
+    "version": "0.1.0",
+    "author": "DynamicOrmLib"
+  },
+  "models": [
+    {
+      "name": "product",
+      "fields": [
+        { "name": "name", "type": "string" },
+        { "name": "category", "type": "string" }
+      ]
+    }
+  ]
+}

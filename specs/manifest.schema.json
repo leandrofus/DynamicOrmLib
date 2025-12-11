@@ -1,33 +1,24 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "title": "Module Manifest",
+  "title": "dynamicOrm model manifest schema",
   "type": "object",
   "properties": {
-    "module": {
-      "type": "object",
-      "properties": {
-        "name": {"type": "string"},
-        "version": {"type": "string"},
-        "author": {"type": "string"}
-      },
-      "required": ["name", "version"]
-    },
     "models": {
       "type": "array",
       "items": {
         "type": "object",
         "properties": {
-          "name": {"type": "string"},
-          "module": {"type": "string"},
+          "name": { "type": "string" },
+          "module": { "type": "string" },
           "fields": {
             "type": "array",
             "items": {
               "type": "object",
               "properties": {
-                "name": {"type": "string"},
-                "label": {"type": "string"},
-                "type": {"type": "string"},
-                "required": {"type": "boolean"}
+                "name": { "type": "string" },
+                "label": { "type": "string" },
+                "type": { "type": "string" },
+                "required": { "type": "boolean" }
               },
               "required": ["name", "type"]
             }
@@ -35,30 +26,7 @@
         },
         "required": ["name"]
       }
-    },
-    "dependsOn": {
-      "type": "array",
-      "items": {"type": "string"},
-      "description": "List of modules this manifest depends on (name@version or name comparator)."
-    },
-    "impacts": {
-      "type": "array",
-      "items": {
-        "type": "object",
-        "properties": {
-          "action": {
-            "type": "string",
-            "enum": ["addField", "extendEnum", "addRelation", "addIndex"]
-          },
-          "targetModule": {"type": "string"},
-          "targetModel": {"type": "string"},
-          "field": {"type": "object"},
-          "details": {"type": "object"}
-        }
-      }
-    },
-    "views": {"type": "array"},
-    "workflows": {"type": "array"}
+    }
   },
-  "required": ["module"]
+  "required": ["models"]
 }
